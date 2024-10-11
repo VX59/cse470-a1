@@ -3,8 +3,10 @@
 #include <numeric>
 #include <unistd.h>
 #include <omp.h>
+#include <iostream>
+#include <thread>
 
-// memory efficient
+// more memory efficient?
 float kernel_convolution(const std::vector<float>&A, const std::vector<float>&K, long long int n, long long int i, long long int j)
 {
     __uint8_t k = 3;
@@ -21,15 +23,16 @@ float kernel_convolution(const std::vector<float>&A, const std::vector<float>&K,
 
 void filter2d(long long int n, long long int m, const std::vector<float>& K, std::vector<float>& A)
 {
+    unsigned int num_cores = std::thread::hardware_concurrency();
+    std::cout << "Number of CPU cores: " << num_cores << std::endl;
+
     std::vector<float> A_prime = A;
     // row parallelism
     #pragma omp parallel for default(none) shared(A, A_prime, K, m, n)
     for (long long int i = 1; i < n-1; i++)
     {
-        // iterate column cells in a row
         for (long long int j = 1; j < m-1; j++)
         {
-            // check if its on the border
             A_prime[i*m+j] = kernel_convolution(A, K, n, i, j);
         }
     }
