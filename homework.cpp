@@ -23,19 +23,40 @@ float kernel_convolution(const std::vector<float>&A, const std::vector<float>&K,
 
 void filter2d(long long int n, long long int m, const std::vector<float>& K, std::vector<float>& A)
 {
-    unsigned int num_cores = std::thread::hardware_concurrency();
-    std::cout << "Number of CPU cores: " << num_cores << std::endl;
 
-    std::vector<float> A_prime = A;
-    // row parallelism
-    #pragma omp parallel for default(none) shared(A, A_prime, K, m, n)
-    for (long long int i = 1; i < n-1; i++)
+    // allocating 2m
+    std::vector<float> Zi(A.begin(),A.begin()+m-2);
+    std::vector<float> Zip(A.begin(),A.begin()+m-2);
+
+    // first boundary .. calculate the initial values
+    #pragma omp parallel for default(none) shared(A, K, m, n, Zi, Zip) schedule(dynamic)
+    for (long long int j = 0; j < m-2; j++)
     {
-        for (long long int j = 1; j < m-1; j++)
-        {
-            A_prime[i*m+j] = kernel_convolution(A, K, n, i, j);
-        }
+        Zip[j] = kernel_convolution(A, K, n, 1, j);
+        Zi[j] = kernel_convolution(A, K, n, 2, j);
     }
 
-    A = A_prime;
+    // execute the rows
+    for (long long int i = 1; i < n-1; i++)
+    {
+        if (i > 2)
+        {
+            #pragma omp parallel for default(none) shared(A, K, m, n, Zi, Zip, i) schedule(dynamic)
+            for (long long int j = 1; j < m-1; j++)
+            {
+                int write_index = i-2;
+                A[write_index*m+j] = Zip[j-1];
+                Zip[j-1] = Zi[j-1];
+                Zi[j-1] = kernel_convolution(A, K, n, i, j);
+            }
+        }
+    }
+    // write Zi and Zip to A
+    #pragma omp parallel for default(none) shared(A, K, m, n, Zi, Zip) schedule(dynamic)
+    for (long long int j = 1; j < m-1; j++)
+    {
+        A[(n-3)*m+j] = Zip[j-1];
+        A[(n-2)*m+j] = Zi[j-1];
+    }
+
 } // filter2d

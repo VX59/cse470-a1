@@ -17,11 +17,6 @@ int main(int argc, char* argv[]) {
     long long int n = std::atoll(argv[1]);
     long long int m = std::atoll(argv[2]);
 
-    if (n * m < 32) {
-        std::cout << "hey, A is too small even for debugging!" << std::endl;
-        return -1;
-    }
-
     std::vector<float> A(n * m);
 
     const int KSIZE = 3 * 3;
@@ -35,7 +30,18 @@ int main(int argc, char* argv[]) {
 
     // now running your awesome code from a0.hpp
     auto t0 = std::chrono::system_clock::now();
-    
+
+    for (long long int i = 0; i < n; i++)
+    {
+        for (long long int j = 0; j < m; j++)
+        {
+            std::cout << (float)A[i*m+j] << " ";
+
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+
     filter2d(n, m, K, A);
 
     auto t1 = std::chrono::system_clock::now();
@@ -43,5 +49,14 @@ int main(int argc, char* argv[]) {
     auto elapsed_par = std::chrono::duration<double>(t1 - t0);
     std::cout << elapsed_par.count() << std::endl;
 
+    for (long long int i = 0; i < n; i++)
+    {
+        for (long long int j = 0; j < m; j++)
+        {
+            std::cout << (float)A[i*m+j] << " ";
+
+        }
+        std::cout << std::endl;
+    }
     return 0;
 } // main
