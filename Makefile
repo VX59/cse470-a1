@@ -2,7 +2,7 @@
 CXX = g++
 CXXFLAGS = -g -fopenmp -std=c++17 -O2   # Compiler flags
 TARGET = a1                             # Final executable name
-SRCS = a1_test.cpp homework.cpp             # List of source files
+SRCS = a1.cpp homework.cpp             # List of source files
 OBJS = $(SRCS:.cpp=.o)                  # Object files (automatically converts .cpp to .o)
 
 # Default target
