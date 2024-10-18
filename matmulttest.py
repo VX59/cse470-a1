@@ -1,25 +1,25 @@
-A=[1,3,4,5,6,3,1,1,9]
-K=[3,3,3,2,2,2,4,4,4]
+A=[9,9,9,
+   1,1,1,
+   2,2,2,
+   3,3,3]
+K=[1,2,3,1,2,3,1,2,3]
 n,m = 3,3
 
-Z=[]
-for theta in range(m*n):
-    z = 0
-    for b in range(0,n):
-        z+=A[(int(theta/n)*m)+b]*K[int(theta/n)+(m*b)]
-    Z.append(z)
+i=1
+j=1
 
-print(Z, sum(Z))
+Z = [0,0,0,0,0,0,0,0,0]
+k = 3
+x = i-1
+y = j-1
+print(x,y)
+A_start_index = x*m+y
+print(A_start_index)
+for a in range(k):
+    for b in range(k):
+        for c in range(k):
+            Z[a*k+b] += A[A_start_index+(a*m+b)]*K[c*k+b]
 
-Z = 0
-k=3
-i,j = 1,1
-
-for x in range(k*k):
-    col = x%k
-    kernel_row_index = i*n+j+(-n-1+(int)(x/k)*n)
-    z = 0
-    for y in range(k):
-        Z += A[kernel_row_index+y]*K[col+k*y]
 
 print(Z)
+print(sum(Z))
