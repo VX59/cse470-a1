@@ -42,6 +42,17 @@ int main(int argc, char* argv[]) {
     }
     std::cout << std::endl;
 
+    for (long long int i = 0; i < 3; i++)
+    {
+        for (long long int j = 0; j < 3; j++)
+        {
+            std::cout << (float)K[i*m+j] << " ";
+
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+
     filter2d(n, m, K, A);
 
     auto t1 = std::chrono::system_clock::now();
