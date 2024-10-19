@@ -29,29 +29,9 @@ int main(int argc, char* argv[]) {
     std::generate(std::begin(K), std::end(K), std::bind(N, gen));
 
     // now running your awesome code from a0.hpp
+
+    std::cout << "starting the filter" << std::endl;
     auto t0 = std::chrono::system_clock::now();
-
-    for (long long int i = 0; i < n; i++)
-    {
-        for (long long int j = 0; j < m; j++)
-        {
-            std::cout << (float)A[i*m+j] << " ";
-
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-
-    for (long long int i = 0; i < 3; i++)
-    {
-        for (long long int j = 0; j < 3; j++)
-        {
-            std::cout << (float)K[i*m+j] << " ";
-
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
 
     filter2d(n, m, K, A);
 
@@ -60,14 +40,5 @@ int main(int argc, char* argv[]) {
     auto elapsed_par = std::chrono::duration<double>(t1 - t0);
     std::cout << elapsed_par.count() << std::endl;
 
-    for (long long int i = 0; i < n; i++)
-    {
-        for (long long int j = 0; j < m; j++)
-        {
-            std::cout << (float)A[i*m+j] << " ";
-
-        }
-        std::cout << std::endl;
-    }
     return 0;
 } // main
