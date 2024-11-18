@@ -17,6 +17,11 @@ int main(int argc, char* argv[]) {
     long long int n = std::atoll(argv[1]);
     long long int m = std::atoll(argv[2]);
 
+    if (n * m < 32) {
+        std::cout << "hey, A is too small even for debugging!" << std::endl;
+        return -1;
+    }
+
     std::vector<float> A(n * m);
 
     const int KSIZE = 3 * 3;
@@ -29,10 +34,8 @@ int main(int argc, char* argv[]) {
     std::generate(std::begin(K), std::end(K), std::bind(N, gen));
 
     // now running your awesome code from a0.hpp
-
-    std::cout << "starting the filter" << std::endl;
     auto t0 = std::chrono::system_clock::now();
-
+    
     filter2d(n, m, K, A);
 
     auto t1 = std::chrono::system_clock::now();

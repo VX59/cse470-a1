@@ -7,7 +7,6 @@
 
 #include "a1.hpp"
 
-
 int main(int argc, char* argv[]) {
     if (argc != 3) {
         std::cout << "usage: " << argv[0] << " n m" << std::endl;
