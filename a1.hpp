@@ -31,7 +31,12 @@ float kernel_filter(const std::vector<float>&A, const std::vector<float>&K, long
                 // boundary condition
                 if (0 <= A_row && A_row < n && 0 <= A_col && A_col < m)
                 {
-                    sum += A[A_row*m + A_col] * K[K_row*k + K_col];
+                    int A_index = A_row*m + A_col;
+                    int K_index = K_row*k + K_col;
+                    if (A_index < A.size() && K_index < K.size())
+                    {
+                    sum += A[A_index] * K[K_index];
+                    }
                 }
             }
             Zsum += sum;
